@@ -1,0 +1,19 @@
+services:
+  db:
+    image: mongo
+    restart: always
+    environment: 
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 3030
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: 3030
+      ME_CONFIG_MONGODB_URL : mongodb://root:3030@db:27017/
