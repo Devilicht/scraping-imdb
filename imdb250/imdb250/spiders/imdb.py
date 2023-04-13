@@ -1,6 +1,6 @@
 import scrapy
 from pymongo import MongoClient
-import settings
+from imdb250 import settings
 
 class ImdbSpider(scrapy.Spider):
     name = "imdb-scraping-movies"
@@ -12,10 +12,10 @@ class ImdbSpider(scrapy.Spider):
         collection = db[settings.MONGODB_COLLECTION]
 
         for movies in response.css('.titleColumn'):
-            yield{
-            'titles' : movies.css('.titleColumn a ::text').get(),
-            'years' : movies.css('.secondaryInfo ::text').get(),
-            'assessment' : response.css('strong ::text').get()
-              }
-
-        collection.insert_one(movies)
+            item = {
+                'titles': movies.css('.titleColumn a ::text').get(),
+                'years': movies.css('.secondaryInfo ::text').get(),
+                'assessment': response.css('strong ::text').get()
+            }
+            collection.insert_one(item)
+            yield item
