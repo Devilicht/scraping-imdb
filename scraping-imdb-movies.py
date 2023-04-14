@@ -1,8 +1,11 @@
 from bs4 import BeautifulSoup
 from requests import get
-import os
-import pymongo
+from pymongo import MongoClient
 
+client = MongoClient('mongodb://root:3030@mongo:27017/')
+
+db = client.plataformMoviesRank
+collection = db.imdbMoviesRank
 
 userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/110.0'
 headers = {'User-Agent': userAgent}
@@ -20,5 +23,9 @@ movies = [{'id': i + 1,
 'years': title.select_one('span').get_text(strip=True),
 'rank': ranks[i].select_one('strong').get_text(strip=True)}
 for i, title in enumerate(titlesMovies)]
+
+collection.insert_many(movies)
+
+client.close()
 
 print (movies)
