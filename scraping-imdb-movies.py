@@ -27,5 +27,3 @@ for i, title in enumerate(titlesMovies)]
 collection.insert_many(movies)
 
 client.close()
-
-print (movies)
